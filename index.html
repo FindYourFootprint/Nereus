@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nereus | Next-Gen Offshore Data Infrastructure</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #060913;
+            --bg-card: rgba(15, 23, 42, 0.6);
+            --border-color: rgba(56, 189, 248, 0.15);
+            --primary-cyan: #38bdf8;
+            --accent-teal: #14b8a6;
+            --energy-amber: #f59e0b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --font-heading: 'Space Grotesk', sans-serif;
+            --font-body: 'Inter', sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: var(--font-body);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Ambient Background */
+        .ambient-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            background: 
+                radial-gradient(circle at 50% 0%, rgba(56, 189, 248, 0.08), transparent 50%),
+                radial-gradient(circle at 0% 100%, rgba(20, 184, 166, 0.05), transparent 40%);
+            pointer-events: none;
+        }
+
+        /* Header & Nav */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 5%;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            background: rgba(6, 9, 19, 0.8);
+            backdrop-filter: blur(12px);
+            z-index: 100;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .logo {
+            font-family: var(--font-heading);
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo span {
+            color: var(--primary-cyan);
+        }
+
+        nav a {
+            color: var(--text-muted);
+            text-decoration: none;
+            margin-left: 2rem;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--primary-cyan);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            padding: 8rem 5% 4rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero-badge {
+            background: rgba(56, 189, 248, 0.1);
+            color: var(--primary-cyan);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            padding: 0.4rem 1.2rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+        }
+
+        .hero h1 {
+            font-family: var(--font-heading);
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            line-height: 1.1;
+            max-width: 900px;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(180deg, #ffffff 0%, #94a3b8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            max-width: 650px;
+            color: var(--text-muted);
+            font-size: 1.15rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            width: 100%;
+            max-width: 1000px;
+            margin-top: 2rem;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 1.5rem;
+            border-radius: 12px;
+            backdrop-filter: blur(8px);
+            text-align: center;
+        }
+
+        .stat-card .number {
+            font-family: var(--font-heading);
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--primary-cyan);
+        }
+
+        .stat-card .label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Sections General */
+        section {
+            padding: 6rem 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-header h2 {
+            font-family: var(--font-heading);
+            font-size: 2.2rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .section-header p {
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Visual Architecture Section */
+        .architecture-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        @media (max-width: 900px) {
+            .architecture-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Rig Cross-Section Diagram */
+        .rig-diagram {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+
+        .diagram-tag {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            border: 1px solid var(--border-color);
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+
+        .data-floor {
+            background: linear-gradient(90deg, rgba(56, 189, 248, 0.1), rgba(56, 189, 248, 0.2));
+            border: 1px solid var(--primary-cyan);
+            border-radius: 6px;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .data-floor:hover {
+            transform: translateX(5px);
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.3);
+        }
+
+        .floor-title {
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .floor-spec {
+            font-size: 0.8rem;
+            color: var(--primary-cyan);
+            font-family: monospace;
+        }
+
+        .rig-substructure {
+            border-top: 2px dashed var(--text-muted);
+            margin-top: 10px;
+            padding-top: 15px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 0 0 6px 6px;
+            padding-bottom: 1rem;
+        }
+
+        .ocean-level {
+            height: 40px;
+            background: linear-gradient(180deg, rgba(20, 184, 166, 0.2), rgba(6, 9, 19, 0.9));
+            border-top: 2px solid var(--accent-teal);
+            margin-top: 10px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            color: var(--accent-teal);
+            letter-spacing: 1px;
+        }
+
+        /* Features List */
+        .feature-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .feature-item {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+
+        .feature-icon {
+            background: rgba(56, 189, 248, 0.1);
+            color: var(--primary-cyan);
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .feature-text h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .feature-text p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* Cooling System Section */
+        .cooling-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2.5rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        @media (max-width: 800px) {
+            .cooling-card {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .cooling-flow {
+            position: relative;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .flow-step {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+
+        .flow-step:last-child {
+            margin-bottom: 0;
+        }
+
+        .flow-pipe {
+            width: 4px;
+            height: 20px;
+            background: var(--accent-teal);
+            margin-left: 18px;
+            margin-top: -5px;
+            margin-bottom: -5px;
+            box-shadow: 0 0 8px var(--accent-teal);
+        }
+
+        .flow-node {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(20, 184, 166, 0.2);
+            border: 1px solid var(--accent-teal);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            color: var(--accent-teal);
+            font-weight: bold;
+        }
+
+        .flow-info h4 {
+            font-size: 0.95rem;
+        }
+
+        .flow-info p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* Power Matrix Section */
+        .power-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .power-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .power-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--primary-cyan);
+        }
+
+        .power-card.surplus::before {
+            background: var(--energy-amber);
+        }
+
+        .power-card h3 {
+            font-family: var(--font-heading);
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .power-card p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .progress-bar-container {
+            background: rgba(255, 255, 255, 0.05);
+            height: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: var(--primary-cyan);
+            border-radius: 5px;
+        }
+
+        .progress-bar.surplus-bar {
+            background: var(--energy-amber);
+        }
+
+        .progress-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--border-color);
+            padding: 3rem 5%;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-top: 4rem;
+        }
+
+        /* Interactive Simulator Utility */
+        .interactive-panel {
+            background: rgba(56, 189, 248, 0.03);
+            border: 1px dashed var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .sim-controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            margin-top: 1rem;
+        }
+
+        input[type=range] {
+            flex-grow: 1;
+            accent-color: var(--primary-cyan);
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="ambient-bg"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="logo">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            NEREUS
+        </div>
+        <nav>
+            <a href="#architecture">Architecture</a>
+            <a href="#power">Power Grid</a>
+            <a href="#cooling">Thermal System</a>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-badge">Offshore Compute Infrastructure</div>
+        <h1>Repurposing Maritime Heritage for Next-Gen Data</h1>
+        <p>Nereus transforms abandoned offshore oil rigs into ultra-efficient, highly secure 5-story superstructures powered completely by wind energy and cooled by the ocean.</p>
+        
+        <div class="hero-stats">
+            <div class="stat-card">
+                <div class="number">175,000</div>
+                <div class="label">Total Sq. Ft Capacity</div>
+            </div>
+            <div class="stat-card">
+                <div class="number">142M</div>
+                <div class="label">kWh Annual Wind Power</div>
+            </div>
+            <div class="stat-card">
+                <div class="number">5 Tier</div>
+                <div class="label">Vertical Modular Structure</div>
+            </div>
+            <div class="stat-card">
+                <div class="number">9%</div>
+                <div class="label">Emergency Energy Surplus</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Architecture Section -->
+    <section id="architecture">
+        <div class="section-header">
+            <h2>The 5-Story Superstructure</h2>
+            <p>Constructed entirely within the payload capacity of legacy modified offshore platforms.</p>
+        </div>
+
+        <div class="architecture-container">
+            <!-- Diagram Visual -->
+            <div class="rig-diagram">
+                <div class="diagram-tag">LIVE SCHEMATIC</div>
+                
+                <div class="data-floor">
+                    <div class="floor-title"><span>Level 5:</span> Control & Command Center</div>
+                    <div class="floor-spec">35,000 SQFT</div>
+                </div>
+                <div class="data-floor">
+                    <div class="floor-title"><span>Level 4:</span> High-Density Compute Array</div>
+                    <div class="floor-spec">35,000 SQFT</div>
+                </div>
+                <div class="data-floor">
+                    <div class="floor-title"><span>Level 3:</span> High-Density Compute Array</div>
+                    <div class="floor-spec">35,000 SQFT</div>
+                </div>
+                <div class="data-floor">
+                    <div class="floor-title"><span>Level 2:</span> Core Network & Storage Stack</div>
+                    <div class="floor-spec">35,000 SQFT</div>
+                </div>
+                <div class="data-floor">
+                    <div class="floor-title"><span>Level 1:</span> Power Distribution & Heat Exchangers</div>
+                    <div class="floor-spec">35,000 SQFT</div>
+                </div>
+
+                <div class="rig-substructure">
+                    <strong>Rig Steel Jacket Substructure</strong><br>
+                    <span style="font-size:0.75rem">Structural load dynamically verified for legacy oil rig platform specs</span>
+                </div>
+
+                <div class="ocean-level">
+                    ▲ OCEAN SURFACE LEVEL (INLET / OUTFLOW ZONE) ▲
+                </div>
+            </div>
+
+            <!-- Descriptive Text -->
+            <div class="feature-list">
+                <div class="feature-item">
+                    <div class="feature-icon">01</div>
+                    <div class="feature-text">
+                        <h3>Structural Optimization</h3>
+                        <p>Offshore oil rigs are engineered to sustain tens of thousands of metric tons of heavy machinery. Modern data center server racks easily conform to these preexisting structural tolerances.</p>
+                    </div>
+                </div>
+
+                <div class="feature-item">
+                    <div class="feature-icon">02</div>
+                    <div class="feature-text">
+                        <h3>Vertical Density Scaling</h3>
+                        <p>By stacking 175,000 sq ft across 5 uniform modules, interconnect distances are minimized while optimizing thermal dissipation efficiency upwards.</p>
+                    </div>
+                </div>
+
+                <div class="feature-item">
+                    <div class="feature-icon">03</div>
+                    <div class="feature-text">
+                        <h3>Zero Land Acquisition Costs</h3>
+                        <p>Repurposing decommissioned maritime assets entirely bypasses mainland real-estate bottlenecks, zoning laws, and municipal power grid constraints.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Thermal System Section -->
+    <section id="cooling">
+        <div class="section-header">
+            <h2>Titanium Heat Exchange Loop</h2>
+            <p>Utilizing infinite deep ocean water for ultra-efficient thermal regulation without consuming freshwater resources.</p>
+        </div>
+
+        <div class="cooling-card">
+            <div class="cooling-flow">
+                <div class="flow-step">
+                    <div class="flow-node">1</div>
+                    <div class="flow-info">
+                        <h4>Cold Sea Water Intake</h4>
+                        <p>Sub-surface cold ocean water pumped dynamically up into the rig.</p>
+                    </div>
+                </div>
+                <div class="flow-pipe"></div>
+                <div class="flow-step">
+                    <div class="flow-node">2</div>
+                    <div class="flow-info">
+                        <h4>Titanium Heat Exchangers</h4>
+                        <p>Corrosion-resistant exchangers isolate saltwater from internal closed-loop coolant.</p>
+                    </div>
+                </div>
+                <div class="flow-pipe"></div>
+                <div class="flow-step">
+                    <div class="flow-node">3</div>
+                    <div class="flow-info">
+                        <h4>Pre-Cooled Internal Circulation</h4>
+                        <p>Pre-chilled fluids maximize cooling system efficiency across all 5 server floors.</p>
+                    </div>
+                </div>
+                <div class="flow-pipe"></div>
+                <div class="flow-step">
+                    <div class="flow-node">4</div>
+                    <div class="flow-info">
+                        <h4>Eco-Safe Ocean Discharge</h4>
+                        <p>Water returned near the intake area, thermally managed to protect marine eco-systems.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <h3 style="font-family: var(--font-heading); font-size: 1.8rem; margin-bottom: 1rem;">Closed-Loop Efficiency</h3>
+                <p style="color: var(--text-muted); margin-bottom: 1.5rem;">
+                    Titanium heat exchangers provide maximum resistance against saltwater corrosion while maintaining an unprecedented thermal transfer rate. Because the sea water pre-cools the system, internal HVAC loads are reduced drastically, yielding an exceptionally low PUE (Power Usage Effectiveness).
+                </p>
+
+                <!-- Interactive Thermal Efficiency Simulator -->
+                <div class="interactive-panel">
+                    <h4 style="font-size: 0.9rem; text-transform: uppercase; color: var(--primary-cyan);">Interactive Model: PUE Estimator</h4>
+                    <div class="sim-controls">
+                        <label for="temp-slider" style="font-size: 0.8rem; width: 120px;">Sea Temp: <span id="temp-val">12</span>°C</label>
+                        <input type="range" id="temp-slider" min="4" max="22" value="12" oninput="updatePUE(this.value)">
+                    </div>
+                    <div style="margin-top: 1rem; font-size: 0.9rem;">
+                        Estimated Platform PUE: <strong id="pue-val" style="color: var(--accent-teal);">1.05</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Power Grid Section -->
+    <section id="power">
+        <div class="section-header">
+            <h2>100% Offshore Wind Generation</h2>
+            <p>Three dedicated offshore turbines feed direct clean energy into the superstructure's micro-grid.</p>
+        </div>
+
+        <div class="power-grid">
+            <div class="power-card">
+                <h3>142,000,000 kWh</h3>
+                <p>Total Annual Renewable Production generated by 3 localized offshore wind turbines.</p>
+                <div class="progress-bar-container">
+                    <div class="progress-bar" style="width: 100%;"></div>
+                </div>
+                <div class="progress-labels">
+                    <span>Clean Wind Generation</span>
+                    <span>100% Target</span>
+                </div>
+            </div>
+
+            <div class="power-card surplus">
+                <h3>9% Power Surplus</h3>
+                <p>Continuous surplus power safely diverted to heavy-duty battery storage banks on Level 1.</p>
+                <div class="progress-bar-container">
+                    <div class="progress-bar surplus-bar" style="width: 9%;"></div>
+                </div>
+                <div class="progress-labels">
+                    <span>Emergency Storage Margin</span>
+                    <span>~12.78M kWh/yr</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 Nereus Data Platforms Inc. — Redefining Offshore Infrastructure.</p>
+    </footer>
+
+    <!-- Simple JavaScript for Interactive PUE Model -->
+    <script>
+        function updatePUE(temp) {
+            document.getElementById('temp-val').innerText = temp;
+            // Simple calculation formula to demonstrate interactive element
+            let basePUE = 1.02;
+            let tempImpact = (temp - 4) * 0.004;
+            let calculatedPUE = (basePUE + tempImpact).toFixed(2);
+            document.getElementById('pue-val').innerText = calculatedPUE;
+        }
+    </script>
+</body>
+</html>
