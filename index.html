@@ -3,24 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEREUS — Offshore Data Infrastructure Platform</title>
+    <title>NEREUS — Offshore Computing Infrastructure & Engineering Platform</title>
     
-    <!-- Three.js Library for 3D Transformation Demo -->
+    <!-- Three.js (WebGL 3D Engine) & OrbitControls -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three-orbitcontrols@2.110.3/OrbitControls.js"></script>
 
     <style>
-        /* -------------------------------------------------------------
-           GLOBAL & TYPOGRAPHY SETTINGS
-           Strict Times New Roman, Black & White Minimalist Aesthetics
-        ------------------------------------------------------------- */
+        /* ==========================================================================
+           1. CORE SYSTEM & TYPOGRAPHY STYLES
+           Strict Black, White, Times New Roman, Architecture-Grade Spacing
+           ========================================================================== */
         :root {
             --black: #000000;
             --white: #ffffff;
-            --gray-light: #f4f4f4;
-            --gray-mid: #e0e0e0;
-            --gray-dark: #666666;
-            --border-thin: 1px solid #000000;
-            --border-subtle: 1px solid #e0e0e0;
+            --gray-100: #fbfbfb;
+            --gray-200: #f2f2f2;
+            --gray-300: #e5e5e5;
+            --gray-400: #cccccc;
+            --gray-600: #777777;
+            --gray-800: #333333;
+            --border-strict: 1px solid #000000;
+            --border-light: 1px solid #e5e5e5;
+            --border-dashed: 1px dashed #777777;
         }
 
         * {
@@ -31,369 +36,684 @@
 
         html {
             scroll-behavior: smooth;
+            background-color: var(--white);
+            color: var(--black);
         }
 
         body {
-            background-color: var(--white);
-            color: var(--black);
             font-family: 'Times New Roman', Times, serif;
-            line-height: 1.7;
             font-size: 18px;
-            letter-spacing: 0.2px;
+            line-height: 1.8;
+            color: var(--black);
+            background-color: var(--white);
             -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
         }
 
-        /* Standard Blank Space Spacing Utilities */
-        .spacer-sm { height: 40px; }
-        .spacer-md { height: 80px; }
-        .spacer-lg { height: 140px; }
-        .spacer-xl { height: 200px; }
+        /* Expansive Atmospheric Blank Space Utility Classes */
+        .space-80 { height: 80px; }
+        .space-120 { height: 120px; }
+        .space-180 { height: 180px; }
+        .space-240 { height: 240px; }
+        .space-300 { height: 300px; }
 
-        /* Outer Margins Container */
         .container {
-            max-width: 1280px;
+            max-width: 1440px;
             margin: 0 auto;
-            padding: 0 40px;
+            padding: 0 60px;
         }
 
-        /* -------------------------------------------------------------
-           HEADER & NAVIGATION
-        ------------------------------------------------------------- */
+        /* ==========================================================================
+           2. NAVIGATION & SYSTEM STATUS BAR
+           ========================================================================== */
         header {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
-            background: rgba(255, 255, 255, 0.95);
-            border-bottom: var(--border-thin);
-            z-index: 1000;
-            backdrop-filter: blur(5px);
+            background: rgba(255, 255, 255, 0.96);
+            border-bottom: var(--border-strict);
+            z-index: 10000;
+            backdrop-filter: blur(8px);
         }
 
-        .nav-inner {
+        .header-inner {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            height: 75px;
+            height: 90px;
         }
 
-        .logo {
-            font-size: 1.6rem;
+        .brand-logo {
+            font-size: 1.8rem;
             font-weight: bold;
-            letter-spacing: 4px;
+            letter-spacing: 6px;
             text-transform: uppercase;
-            color: var(--black);
             text-decoration: none;
+            color: var(--black);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .brand-logo::before {
+            content: '';
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            background: var(--black);
         }
 
         nav ul {
             display: flex;
             list-style: none;
-            gap: 40px;
+            gap: 45px;
         }
 
         nav a {
             color: var(--black);
             text-decoration: none;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: opacity 0.2s;
+            letter-spacing: 2px;
+            transition: opacity 0.2s ease;
         }
 
         nav a:hover {
-            opacity: 0.5;
+            opacity: 0.4;
         }
 
-        /* -------------------------------------------------------------
-           HERO SECTION
-        ------------------------------------------------------------- */
-        .hero {
-            padding-top: 180px;
-            padding-bottom: 100px;
-            border-bottom: var(--border-thin);
-        }
-
-        .hero-title {
-            font-size: clamp(2.8rem, 5.5vw, 5.2rem);
-            font-weight: normal;
-            line-height: 1.1;
-            margin-bottom: 40px;
-            max-width: 1050px;
-            letter-spacing: -0.5px;
-        }
-
-        .hero-subtitle {
-            font-size: 1.35rem;
-            max-width: 780px;
-            color: var(--gray-dark);
-            margin-bottom: 70px;
-        }
-
-        .metrics-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            border-top: var(--border-thin);
-            border-left: var(--border-thin);
-        }
-
-        .metric-box {
-            border-right: var(--border-thin);
-            border-bottom: var(--border-thin);
-            padding: 30px;
-            background: var(--white);
-        }
-
-        .metric-value {
-            font-size: 2.8rem;
-            font-weight: normal;
-            display: block;
-            margin-bottom: 5px;
-        }
-
-        .metric-label {
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--black);
-        }
-
-        /* -------------------------------------------------------------
-           3D INTERACTIVE TRANSFORMATION DEMO
-        ------------------------------------------------------------- */
-        .demo-section {
-            padding: 100px 0;
-            background: var(--white);
-            border-bottom: var(--border-thin);
-        }
-
-        .demo-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            margin-bottom: 40px;
-        }
-
-        .demo-title {
-            font-size: 2.2rem;
-            font-weight: normal;
-        }
-
-        .demo-container {
-            border: var(--border-thin);
-            position: relative;
-            background: #fafafa;
-        }
-
-        #webgl-canvas {
-            width: 100%;
-            height: 550px;
-            display: block;
-        }
-
-        .demo-controls {
-            padding: 25px 30px;
-            border-top: var(--border-thin);
-            background: var(--white);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 30px;
-        }
-
-        .slider-wrapper {
-            flex-grow: 1;
+        .header-actions {
             display: flex;
             align-items: center;
             gap: 20px;
         }
 
-        .slider-label {
-            font-size: 0.9rem;
+        .system-pill {
+            font-size: 0.75rem;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
+            border: var(--border-strict);
+            padding: 6px 14px;
+            background: var(--white);
+        }
+
+        /* ==========================================================================
+           3. HERO SECTION & PLATFORM OVERVIEW
+           ========================================================================== */
+        .hero-section {
+            padding-top: 220px;
+            padding-bottom: 120px;
+            border-bottom: var(--border-strict);
+        }
+
+        .hero-title-group {
+            max-width: 1200px;
+        }
+
+        .meta-tag {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            display: block;
+            margin-bottom: 30px;
+            color: var(--gray-800);
+        }
+
+        .hero-heading {
+            font-size: clamp(3rem, 6.2vw, 6rem);
+            font-weight: normal;
+            line-height: 1.05;
+            letter-spacing: -1px;
+            margin-bottom: 50px;
+        }
+
+        .hero-lead-text {
+            font-size: 1.5rem;
+            max-width: 860px;
+            color: var(--gray-800);
+            line-height: 1.6;
+            margin-bottom: 80px;
+        }
+
+        .hero-stats-matrix {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            border-top: var(--border-strict);
+            border-left: var(--border-strict);
+        }
+
+        .stat-card {
+            border-right: var(--border-strict);
+            border-bottom: var(--border-strict);
+            padding: 40px 35px;
+            background: var(--white);
+            transition: background 0.3s ease;
+        }
+
+        .stat-card:hover {
+            background: var(--gray-100);
+        }
+
+        .stat-number {
+            font-size: 3.4rem;
+            font-weight: normal;
+            line-height: 1;
+            display: block;
+            margin-bottom: 12px;
+        }
+
+        .stat-desc {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--black);
+            display: block;
+        }
+
+        /* ==========================================================================
+           4. 3D DIGITAL TWIN TRANSFORMATION SIMULATOR
+           ========================================================================== */
+        .demo-viewport-wrapper {
+            border-bottom: var(--border-strict);
+            background: var(--white);
+            position: relative;
+        }
+
+        .viewport-header {
+            padding: 60px 0 30px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .viewport-heading {
+            font-size: 2.8rem;
+            font-weight: normal;
+        }
+
+        .canvas-stage {
+            width: 100%;
+            height: 720px;
+            border: var(--border-strict);
+            background: #fdfdfd;
+            position: relative;
+        }
+
+        #transformation-canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+            cursor: grab;
+        }
+
+        #transformation-canvas:active {
+            cursor: grabbing;
+        }
+
+        .viewport-controls-bar {
+            border-left: var(--border-strict);
+            border-right: var(--border-strict);
+            border-bottom: var(--border-strict);
+            padding: 30px 40px;
+            background: var(--white);
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .slider-node-label {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
             white-space: nowrap;
         }
 
-        input[type=range] {
+        .slider-track {
+            flex-grow: 1;
+            position: relative;
+        }
+
+        input[type=range].transform-range {
             width: 100%;
             -webkit-appearance: none;
-            background: var(--gray-mid);
+            background: var(--black);
             height: 2px;
             outline: none;
         }
 
-        input[type=range]::-webkit-slider-thumb {
+        input[type=range].transform-range::-webkit-slider-thumb {
             -webkit-appearance: none;
-            width: 20px;
-            height: 20px;
-            background: var(--black);
+            width: 24px;
+            height: 24px;
+            background: var(--white);
+            border: 2px solid var(--black);
             cursor: pointer;
             border-radius: 50%;
+            transition: transform 0.1s ease;
         }
 
-        .preset-buttons {
+        input[type=range].transform-range::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+            background: var(--black);
+        }
+
+        .preset-btn-group {
             display: flex;
-            gap: 10px;
+            gap: 12px;
+            justify-content: flex-end;
         }
 
-        .btn-minimal {
+        .btn-sharp {
             background: var(--white);
             color: var(--black);
-            border: var(--border-thin);
-            padding: 8px 18px;
+            border: var(--border-strict);
+            padding: 12px 24px;
             font-family: 'Times New Roman', Times, serif;
             font-size: 0.85rem;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
             cursor: pointer;
             transition: all 0.2s ease;
         }
 
-        .btn-minimal:hover, .btn-minimal.active {
+        .btn-sharp:hover, .btn-sharp.active {
             background: var(--black);
             color: var(--white);
         }
 
-        /* -------------------------------------------------------------
-           ARCHITECTURE & EXPLANATIONS
-        ------------------------------------------------------------- */
-        .content-section {
-            padding: 100px 0;
-            border-bottom: var(--border-thin);
+        .hud-overlay {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            pointer-events: none;
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            background: rgba(255, 255, 255, 0.9);
+            border: var(--border-strict);
+            padding: 15px 20px;
+            z-index: 10;
         }
 
-        .two-column {
+        .hud-overlay div {
+            margin-bottom: 4px;
+        }
+
+        .hud-overlay div:last-child {
+            margin-bottom: 0;
+        }
+
+        /* ==========================================================================
+           5. SECTION LAYOUTS & TECHNICAL EXPLANATIONS
+           ========================================================================== */
+        .section-wrapper {
+            border-bottom: var(--border-strict);
+            padding-bottom: 120px;
+        }
+
+        .grid-split-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 100px;
+        }
+
+        .grid-split-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 60px;
+        }
+
+        .section-num {
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 25px;
+            display: block;
+            color: var(--gray-800);
+        }
+
+        .section-heading-lg {
+            font-size: 2.8rem;
+            font-weight: normal;
+            line-height: 1.15;
+            margin-bottom: 35px;
+        }
+
+        .body-paragraph {
+            font-size: 1.15rem;
+            color: #1a1a1a;
+            margin-bottom: 28px;
+            line-height: 1.75;
+        }
+
+        /* Stack Blueprint Component */
+        .blueprint-card {
+            border: var(--border-strict);
+            background: var(--white);
+        }
+
+        .blueprint-header {
+            padding: 25px 30px;
+            border-bottom: var(--border-strict);
+            background: var(--gray-100);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .blueprint-row {
+            padding: 28px 30px;
+            border-bottom: var(--border-strict);
+            display: grid;
+            grid-template-columns: 120px 1fr 120px;
+            align-items: center;
+            gap: 20px;
+            transition: background 0.2s ease;
+        }
+
+        .blueprint-row:last-child {
+            border-bottom: none;
+        }
+
+        .blueprint-row:hover {
+            background: var(--gray-100);
+        }
+
+        .deck-badge {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            border: var(--border-strict);
+            padding: 4px 8px;
+            text-align: center;
+        }
+
+        .deck-title {
+            font-size: 1.15rem;
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+
+        .deck-sub {
+            font-size: 0.85rem;
+            color: var(--gray-600);
+        }
+
+        .deck-area {
+            font-size: 0.95rem;
+            text-align: right;
+            font-weight: bold;
+        }
+
+        /* ==========================================================================
+           6. INTERACTIVE THERMAL SYSTEM SIMULATOR
+           ========================================================================== */
+        .thermal-sim-box {
+            border: var(--border-strict);
+            background: var(--white);
+            padding: 60px;
+        }
+
+        .sim-grid-layout {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 80px;
         }
 
-        .section-number {
-            font-size: 1rem;
+        .sim-input-group {
+            margin-bottom: 35px;
+        }
+
+        .sim-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 20px;
+            letter-spacing: 1.5px;
+            margin-bottom: 12px;
+        }
+
+        .sim-slider-input {
+            width: 100%;
+            -webkit-appearance: none;
+            background: var(--black);
+            height: 2px;
+            outline: none;
+        }
+
+        .sim-slider-input::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            background: var(--white);
+            border: 2px solid var(--black);
+            cursor: pointer;
+            border-radius: 50%;
+        }
+
+        .sim-metrics-output {
+            border-left: var(--border-strict);
+            padding-left: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 40px;
+        }
+
+        .metric-display-node {
+            border-bottom: var(--border-light);
+            padding-bottom: 20px;
+        }
+
+        .metric-display-node:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .node-val {
+            font-size: 3rem;
+            line-height: 1;
             display: block;
+            margin-bottom: 8px;
         }
 
-        .heading-large {
-            font-size: 2.4rem;
-            font-weight: normal;
-            line-height: 1.2;
-            margin-bottom: 30px;
+        .node-lbl {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--gray-800);
         }
 
-        .text-body {
-            color: #222222;
-            margin-bottom: 20px;
-            font-size: 1.05rem;
+        /* ==========================================================================
+           7. POWER MATRIX INTERACTIVE CALCULATOR
+           ========================================================================== */
+        .power-calc-container {
+            border: var(--border-strict);
+            background: var(--white);
         }
 
-        /* Structure Stack Diagram */
-        .stack-diagram {
-            border: var(--border-thin);
-            padding: 0;
-            list-style: none;
-        }
-
-        .stack-layer {
-            padding: 22px 25px;
-            border-bottom: var(--border-thin);
+        .calc-top-bar {
+            padding: 30px 40px;
+            border-bottom: var(--border-strict);
+            background: var(--gray-100);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            transition: background 0.2s;
         }
 
-        .stack-layer:last-child {
-            border-bottom: none;
-        }
-
-        .stack-layer:hover {
-            background: var(--gray-light);
-        }
-
-        .layer-name {
-            font-size: 1.1rem;
-            font-weight: bold;
-        }
-
-        .layer-details {
-            font-size: 0.9rem;
-            color: var(--gray-dark);
-        }
-
-        /* -------------------------------------------------------------
-           THERMAL SIMULATOR INTERACTIVE
-        ------------------------------------------------------------- */
-        .simulator-box {
-            border: var(--border-thin);
-            padding: 40px;
-            background: var(--white);
-            margin-top: 40px;
-        }
-
-        .sim-grid {
+        .calc-body {
+            padding: 50px 40px;
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1fr 1fr 1fr;
             gap: 40px;
-            align-items: center;
         }
 
-        .sim-readout {
-            border-left: var(--border-thin);
-            padding-left: 40px;
+        .calc-card {
+            border: var(--border-strict);
+            padding: 35px 30px;
+            background: var(--white);
+            position: relative;
         }
 
-        .readout-item {
-            margin-bottom: 20px;
-        }
-
-        .readout-value {
-            font-size: 2rem;
+        .calc-card-title {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 15px;
             display: block;
         }
 
-        .readout-label {
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--gray-dark);
+        .calc-card-val {
+            font-size: 2.4rem;
+            margin-bottom: 10px;
         }
 
-        /* -------------------------------------------------------------
-           FOOTER
-        ------------------------------------------------------------- */
+        .calc-card-sub {
+            font-size: 0.85rem;
+            color: var(--gray-600);
+            line-height: 1.5;
+        }
+
+        /* ==========================================================================
+           8. EMERGENCY DISRUPTION & RELIABILITY SCENARIOS
+           ========================================================================== */
+        .scenario-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+        }
+
+        .scenario-card {
+            border: var(--border-strict);
+            padding: 40px 35px;
+            background: var(--white);
+            transition: transform 0.2s ease, background 0.2s ease;
+        }
+
+        .scenario-card:hover {
+            background: var(--gray-100);
+            transform: translateY(-4px);
+        }
+
+        .scenario-code {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-bottom: var(--border-strict);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .scenario-title {
+            font-size: 1.4rem;
+            font-weight: normal;
+            margin-bottom: 15px;
+        }
+
+        .scenario-body {
+            font-size: 0.95rem;
+            color: var(--gray-800);
+            line-height: 1.6;
+        }
+
+        /* ==========================================================================
+           9. FOOTER
+           ========================================================================== */
         footer {
-            padding: 80px 0;
+            border-top: var(--border-strict);
+            padding: 100px 0;
             background: var(--white);
             font-size: 0.9rem;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 80px;
+            margin-bottom: 80px;
+        }
+
+        .footer-brand {
+            font-size: 1.6rem;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .footer-desc {
+            max-width: 480px;
+            color: var(--gray-800);
+            line-height: 1.7;
+        }
+
+        .footer-heading {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 25px;
             color: var(--black);
         }
 
-        .footer-inner {
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+            color: var(--gray-800);
+            text-decoration: none;
+            transition: opacity 0.2s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--black);
+            opacity: 0.5;
+        }
+
+        .footer-bottom {
+            border-top: var(--border-light);
+            padding-top: 40px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-top: var(--border-thin);
-            padding-top: 40px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--gray-600);
         }
 
-        /* Responsive design Adjustments */
-        @media (max-width: 900px) {
-            .metrics-grid, .two-column, .sim-grid {
+        /* Responsive Breakpoints */
+        @media (max-width: 1200px) {
+            .hero-stats-matrix, .grid-split-2, .grid-split-3, .sim-grid-layout, .calc-body, .scenario-grid, .footer-grid {
                 grid-template-columns: 1fr;
             }
-            .sim-readout {
+            .sim-metrics-output {
                 border-left: none;
-                border-top: var(--border-thin);
+                border-top: var(--border-strict);
                 padding-left: 0;
-                padding-top: 30px;
+                padding-top: 40px;
             }
-            .demo-controls {
-                flex-direction: column;
-                align-items: stretch;
+            .viewport-controls-bar {
+                grid-template-columns: 1fr;
+            }
+            .canvas-stage {
+                height: 500px;
             }
         }
     </style>
@@ -402,169 +722,225 @@
 
     <!-- Header Navigation -->
     <header>
-        <div class="container nav-inner">
-            <a href="#" class="logo">Nereus</a>
+        <div class="container header-inner">
+            <a href="#" class="brand-logo">Nereus</a>
             <nav>
                 <ul>
-                    <li><a href="#transformation">Transformation</a></li>
+                    <li><a href="#transformation">Digital Twin</a></li>
                     <li><a href="#architecture">Architecture</a></li>
-                    <li><a href="#thermal">Thermal Systems</a></li>
+                    <li><a href="#thermal">Thermal Exchange</a></li>
                     <li><a href="#power">Power Matrix</a></li>
+                    <li><a href="#reliability">Reliability</a></li>
                 </ul>
             </nav>
+            <div class="header-actions">
+                <span class="system-pill">Platform Status: Active</span>
+            </div>
         </div>
     </header>
 
     <!-- Hero Section -->
-    <section class="hero">
+    <section class="hero-section">
         <div class="container">
-            <h1 class="hero-title">High-density data architecture built on repurposed offshore infrastructure.</h1>
-            <p class="hero-subtitle">Nereus adapts abandoned offshore oil rig platforms into 5-story superstructures housing 175,000 sq ft of water-cooled compute infrastructure powered entirely by wind energy.</p>
-            
-            <div class="spacer-sm"></div>
+            <div class="hero-title-group">
+                <span class="meta-tag">System Architectural Brief — Revision 2026.4</span>
+                <h1 class="hero-heading">Offshore compute infrastructure engineered for extreme thermal and energy efficiency.</h1>
+                <p class="hero-lead-text">Nereus converts legacy maritime petroleum rigs into high-density 5-story superstructures. Operating off the continental grid, each platform delivers 175,000 square feet of compute payload powered by offshore wind and cooled directly by titanium sea-water exchange loops.</p>
+            </div>
 
-            <div class="metrics-grid">
-                <div class="metric-box">
-                    <span class="metric-value">175,000</span>
-                    <span class="metric-label">Sq Ft Floor Area</span>
+            <div class="space-80"></div>
+
+            <div class="hero-stats-matrix">
+                <div class="stat-card">
+                    <span class="stat-number">175,000</span>
+                    <span class="stat-desc">Sq Ft Floor Capacity</span>
                 </div>
-                <div class="metric-box">
-                    <span class="metric-value">5 Tiers</span>
-                    <span class="metric-label">Stacked Structure</span>
+                <div class="stat-card">
+                    <span class="stat-number">142,000,000</span>
+                    <span class="stat-desc">kWh Annual Wind Power</span>
                 </div>
-                <div class="metric-box">
-                    <span class="metric-value">142M</span>
-                    <span class="metric-label">kWh Annual Wind Power</span>
+                <div class="stat-card">
+                    <span class="stat-number">5-Tier</span>
+                    <span class="stat-desc">Vertical Superstructure</span>
                 </div>
-                <div class="metric-box">
-                    <span class="metric-value">9%</span>
-                    <span class="metric-label">Emergency Surplus</span>
+                <div class="stat-card">
+                    <span class="stat-number">9.0%</span>
+                    <span class="stat-desc">Emergency Battery Reserve</span>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Ample Blank Space -->
-    <div class="spacer-lg"></div>
+    <div class="space-180"></div>
 
-    <!-- Interactive Rig Transformation Section -->
-    <section id="transformation" class="demo-section">
+    <!-- 3D Interactive Transformation Digital Twin Section -->
+    <section id="transformation" class="demo-viewport-wrapper">
         <div class="container">
-            <div class="demo-header">
+            <div class="viewport-header">
                 <div>
-                    <span class="section-number">Interactive Demo</span>
-                    <h2 class="demo-title">Platform Transformation Sequence</h2>
+                    <span class="section-num">01 / Interactive Digital Twin</span>
+                    <h2 class="viewport-heading">Legacy Rig to Nereus Transformation</h2>
                 </div>
-                <div class="preset-buttons">
-                    <button class="btn-minimal" onclick="setTransformProgress(0)">Legacy Rig</button>
-                    <button class="btn-minimal" onclick="setTransformProgress(0.5)">Mid-Stage</button>
-                    <button class="btn-minimal" onclick="setTransformProgress(1.0)">Nereus Complex</button>
+                <div style="text-align: right;">
+                    <span style="font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--gray-600);">Drag to rotate • Scroll to zoom • Right-click to pan</span>
                 </div>
             </div>
 
-            <div class="demo-container">
-                <!-- Three.js Canvas -->
-                <canvas id="webgl-canvas"></canvas>
+            <div class="canvas-stage">
+                <div class="hud-overlay">
+                    <div><strong>PLATFORM STATE:</strong> <span id="hud-state-text">Nereus Superstructure</span></div>
+                    <div><strong>STRUCTURAL LOAD:</strong> <span id="hud-load-text">42,500 Metric Tons</span></div>
+                    <div><strong>THERMAL EXCHANGE:</strong> <span id="hud-thermal-text">Passive Sea-Loop Active</span></div>
+                    <div><strong>WIND INTERFACE:</strong> <span id="hud-wind-text">3x Turbines Synchronized</span></div>
+                </div>
+                <canvas id="transformation-canvas"></canvas>
+            </div>
 
-                <div class="demo-controls">
-                    <div class="slider-wrapper">
-                        <span class="slider-label">Legacy Rig</span>
-                        <input type="range" id="transformSlider" min="0" max="100" value="100" oninput="onSliderChange(this.value)">
-                        <span class="slider-label">Nereus Data Center</span>
+            <div class="viewport-controls-bar">
+                <div class="slider-container">
+                    <span class="slider-node-label">Legacy Rig</span>
+                    <div class="slider-track">
+                        <input type="range" class="transform-range" id="morphSlider" min="0" max="100" value="100" oninput="updateMorphFactor(this.value)">
+                    </div>
+                    <span class="slider-node-label">Nereus Data Platform</span>
+                </div>
+
+                <div class="preset-btn-group">
+                    <button class="btn-sharp" onclick="setMorphPreset(0)">Decommissioned Rig</button>
+                    <button class="btn-sharp" onclick="setMorphPreset(50)">Conversion Phase</button>
+                    <button class="btn-sharp active" id="btn-full-nereus" onclick="setMorphPreset(100)">Nereus Platform</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="space-240"></div>
+
+    <!-- Architectural Deep Dive Section -->
+    <section id="architecture" class="section-wrapper">
+        <div class="container">
+            <div class="grid-split-2">
+                <div>
+                    <span class="section-num">02 / Structural Engineering</span>
+                    <h2 class="section-heading-lg">Exploiting legacy structural margins for maximum vertical density.</h2>
+                    <p class="body-paragraph">Decommissioned modified offshore oil platforms offer unrivaled structural integrity, designed to withstand ocean wave forces and tens of thousands of metric tons of heavy drilling machinery. Modern high-density server racks weigh significantly less than legacy drilling equipment, allowing Nereus to stack a 175,000 square foot building directly onto existing jackets without compromising safety factors.</p>
+                    <p class="body-paragraph">By erecting a uniform 5-story modular building onto the platform, interconnect routing distance between server racks is drastically shortened while thermal dissipation channels run straight up through the central core.</p>
+
+                    <div class="space-40"></div>
+
+                    <div style="border: var(--border-strict); padding: 30px; background: var(--gray-100);">
+                        <div style="font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px;">Engineering Insight</div>
+                        <div style="font-size: 1.05rem; color: var(--gray-800);">Zero mainland real-estate acquisition costs, zero municipal zoning delays, and immediate access to unthrottled offshore energy currents.</div>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="blueprint-card">
+                        <div class="blueprint-header">
+                            <span>5-Story Stack Specification</span>
+                            <span>35,000 SQFT / DECK</span>
+                        </div>
+                        <div class="blueprint-row">
+                            <span class="deck-badge">Level 05</span>
+                            <div>
+                                <div class="deck-title">Command & Security Operations</div>
+                                <div class="deck-sub">Autonomous platform monitoring, satellite connectivity, perimeter defense</div>
+                            </div>
+                            <span class="deck-area">35,000 FT²</span>
+                        </div>
+                        <div class="blueprint-row">
+                            <span class="deck-badge">Level 04</span>
+                            <div>
+                                <div class="deck-title">Compute Array Deck B</div>
+                                <div class="deck-sub">Ultra-high density AI training racks, liquid-to-chip manifold interfaces</div>
+                            </div>
+                            <span class="deck-area">35,000 FT²</span>
+                        </div>
+                        <div class="blueprint-row">
+                            <span class="deck-badge">Level 03</span>
+                            <div>
+                                <div class="deck-title">Compute Array Deck A</div>
+                                <div class="deck-sub">General cloud compute stacks, distributed storage clusters</div>
+                            </div>
+                            <span class="deck-area">35,000 FT²</span>
+                        </div>
+                        <div class="blueprint-row">
+                            <span class="deck-badge">Level 02</span>
+                            <div>
+                                <div class="deck-title">Network Interconnect Core</div>
+                                <div class="deck-sub">High-bandwidth subsea fiber termination, core routing matrix</div>
+                            </div>
+                            <span class="deck-area">35,000 FT²</span>
+                        </div>
+                        <div class="blueprint-row">
+                            <span class="deck-badge">Level 01</span>
+                            <div>
+                                <div class="deck-title">Power Ingress & Titanium Exchangers</div>
+                                <div class="deck-sub">Titanium sea-water heat exchange pumps, solid-state battery banks</div>
+                            </div>
+                            <span class="deck-area">35,000 FT²</span>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <div class="spacer-xl"></div>
+    <div class="space-240"></div>
 
-    <!-- Architecture & Structural Engineering -->
-    <section id="architecture" class="content-section">
+    <!-- Thermal Systems & Ocean Water Heat Exchange -->
+    <section id="thermal" class="section-wrapper">
         <div class="container">
-            <div class="two-column">
-                <div>
-                    <span class="section-number">01 / Structural Engineering</span>
-                    <h2 class="heading-large">Repurposing existing offshore weight capacity.</h2>
-                    <p class="text-body">Decommissioned oil platforms are structural marvels designed to endure thousands of tons of drilling equipment and rough sea loads. Nereus utilizes these sound steel jacketing systems to house a 5-story stacked modular data building.</p>
-                    <p class="text-body">By distributing 175,000 square feet across 5 vertical tiers, total physical footprint is minimized while keeping structural center of gravity optimized within the rig's original specs.</p>
-                </div>
+            <span class="section-num">03 / Thermal Engineering</span>
+            <h2 class="section-heading-lg">Titanium Heat Exchangers & Closed-Loop Deep Water Chilling</h2>
+            <p class="body-paragraph" style="max-width: 900px;">Mainland data centers consume millions of gallons of freshwater daily in evaporative cooling towers. Nereus completely eliminates freshwater consumption by drawing cold deep sea water directly up into Level 01 heat exchangers. Titanium alloy plates isolate corrosive ocean water from internal closed-loop distilled coolant, yielding unmatched thermal transfer efficiency with zero marine contamination.</p>
 
-                <div>
-                    <ul class="stack-diagram">
-                        <li class="stack-layer">
-                            <div>
-                                <div class="layer-name">Level 05: Command & Security</div>
-                                <div class="layer-details">Network operations, monitoring, air defense telemetry</div>
-                            </div>
-                            <span>35,000 SQFT</span>
-                        </li>
-                        <li class="stack-layer">
-                            <div>
-                                <div class="layer-name">Level 04: Compute Density Stack B</div>
-                                <div class="layer-details">High-density liquid-cooled server racks</div>
-                            </div>
-                            <span>35,000 SQFT</span>
-                        </li>
-                        <li class="stack-layer">
-                            <div>
-                                <div class="layer-name">Level 03: Compute Density Stack A</div>
-                                <div class="layer-details">High-density liquid-cooled server racks</div>
-                            </div>
-                            <span>35,000 SQFT</span>
-                        </li>
-                        <li class="stack-layer">
-                            <div>
-                                <div class="layer-name">Level 02: Network & Core Storage</div>
-                                <div class="layer-details">Fiber distribution, main interconnects, storage banks</div>
-                            </div>
-                            <span>35,000 SQFT</span>
-                        </li>
-                        <li class="stack-layer">
-                            <div>
-                                <div class="layer-name">Level 01: Thermal & Power Ingress</div>
-                                <div class="layer-details">Titanium heat exchangers, battery reserves, power distribution</div>
-                            </div>
-                            <span>35,000 SQFT</span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
+            <div class="space-80"></div>
 
-    <div class="spacer-xl"></div>
-
-    <!-- Thermal Systems & Simulator -->
-    <section id="thermal" class="content-section">
-        <div class="container">
-            <span class="section-number">02 / Thermal System</span>
-            <h2 class="heading-large">Direct Titanium Ocean Heat Exchange</h2>
-            <p class="text-body" style="max-width: 800px;">Cold deep-ocean seawater is drawn into low-level titanium heat exchangers before being safely discharged at near-intake depth. Titanium prevents marine corrosion while facilitating continuous passive pre-cooling for internal loops, drastically reducing operational overhead.</p>
-
-            <!-- Simulator UI -->
-            <div class="simulator-box">
-                <h3 style="font-size: 1.3rem; margin-bottom: 25px; font-weight: normal; text-transform: uppercase; letter-spacing: 1px;">Interactive Thermal Efficiency Model</h3>
-                <div class="sim-grid">
+            <div class="thermal-sim-box">
+                <h3 style="font-size: 1.4rem; font-weight: normal; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 40px; border-bottom: var(--border-strict); padding-bottom: 20px;">Interactive Thermal Efficiency Simulator</h3>
+                
+                <div class="sim-grid-layout">
                     <div>
-                        <div style="margin-bottom: 30px;">
-                            <label style="display: block; margin-bottom: 10px; font-size: 0.9rem; text-transform: uppercase;">Intake Water Temp: <span id="intake-temp-label">10</span>°C</label>
-                            <input type="range" id="tempSlider" min="2" max="20" value="10" oninput="calculateThermalSim()">
+                        <div class="sim-input-group">
+                            <div class="sim-label">
+                                <span>Ocean Water Intake Temperature</span>
+                                <span><strong id="sim-temp-val">10</strong> °C</span>
+                            </div>
+                            <input type="range" class="sim-slider-input" id="sim-temp" min="2" max="22" value="10" oninput="runThermalSimulation()">
                         </div>
-                        <div>
-                            <label style="display: block; margin-bottom: 10px; font-size: 0.9rem; text-transform: uppercase;">Compute Workload Load: <span id="workload-label">75</span>%</label>
-                            <input type="range" id="workloadSlider" min="10" max="100" value="75" oninput="calculateThermalSim()">
+
+                        <div class="sim-input-group">
+                            <div class="sim-label">
+                                <span>Server Rack Compute Utilization</span>
+                                <span><strong id="sim-load-val">80</strong> %</span>
+                            </div>
+                            <input type="range" class="sim-slider-input" id="sim-load" min="10" max="100" value="80" oninput="runThermalSimulation()">
+                        </div>
+
+                        <div class="sim-input-group">
+                            <div class="sim-label">
+                                <span>Titanium Pump Flow Rate</span>
+                                <span><strong id="sim-flow-val">12,500</strong> GPM</span>
+                            </div>
+                            <input type="range" class="sim-slider-input" id="sim-flow" min="5000" max="20000" value="12500" step="500" oninput="runThermalSimulation()">
                         </div>
                     </div>
 
-                    <div class="sim-readout">
-                        <div class="readout-item">
-                            <span class="readout-value" id="pue-display">1.038</span>
-                            <span class="readout-label">Calculated PUE (Power Usage Effectiveness)</span>
+                    <div class="sim-metrics-output">
+                        <div class="metric-display-node">
+                            <span class="node-val" id="res-pue">1.032</span>
+                            <span class="node-lbl">Calculated Platform PUE (Power Usage Effectiveness)</span>
                         </div>
-                        <div class="readout-item">
-                            <span class="readout-value" id="cooling-energy-display">4.2 kW</span>
-                            <span class="readout-label">Cooling System Overhead</span>
+
+                        <div class="metric-display-node">
+                            <span class="node-val" id="res-savings">94.8%</span>
+                            <span class="node-lbl">Cooling Overhead Reduction vs. Mainland Facilities</span>
+                        </div>
+
+                        <div class="metric-display-node">
+                            <span class="node-val" id="res-delta">+1.8 °C</span>
+                            <span class="node-lbl">Eco-Safe Sea Water Discharge Temperature Delta</span>
                         </div>
                     </div>
                 </div>
@@ -572,249 +948,415 @@
         </div>
     </section>
 
-    <div class="spacer-xl"></div>
+    <div class="space-240"></div>
 
-    <!-- Power Matrix & Battery System -->
-    <section id="power" class="content-section">
+    <!-- Renewable Power Matrix & Battery System -->
+    <section id="power" class="section-wrapper">
         <div class="container">
-            <div class="two-column">
-                <div>
-                    <span class="section-number">03 / Renewable Power Matrix</span>
-                    <h2 class="heading-large">100% Wind-powered microgrid with 9% emergency reserve.</h2>
-                    <p class="text-body">Three offshore turbines integrated around the rig generate roughly 142 million kWh of clean electricity annually. This production envelope comfortably exceeds the platform's nominal power demands.</p>
+            <span class="section-num">04 / Energy Infrastructure</span>
+            <h2 class="section-heading-lg">100% Offshore Wind Generation & 9% Emergency Battery Margin</h2>
+            <p class="body-paragraph" style="max-width: 900px;">Three heavy-duty offshore turbines positioned surrounding the platform yield roughly 142 million kWh of clean power annually. This supply exceeds the continuous draw of the superstructure, creating a 9% net energy surplus. This surplus is stored in Level 01 solid-state battery banks to guarantee uninterpreted power during low wind conditions.</p>
+
+            <div class="space-80"></div>
+
+            <div class="power-calc-container">
+                <div class="calc-top-bar">
+                    <span style="font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px;">Power Generation & Surplus Distribution Matrix</span>
+                    <span style="font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--gray-600);">Real-Time Microgrid Balance</span>
                 </div>
-                <div>
-                    <div style="border: var(--border-thin); padding: 35px; background: var(--white); margin-bottom: 30px;">
-                        <h3 style="font-weight: normal; font-size: 1.2rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px;">Annual Production Envelope</h3>
-                        <div style="font-size: 2.5rem; margin-bottom: 5px;">142,000,000 kWh</div>
-                        <div style="font-size: 0.85rem; color: var(--gray-dark); text-transform: uppercase; letter-spacing: 1px;">Generated by 3 Dedicated Offshore Turbines</div>
+
+                <div class="calc-body">
+                    <div class="calc-card">
+                        <span class="calc-card-title">Gross Annual Generation</span>
+                        <div class="calc-card-val">142.0 M</div>
+                        <p class="calc-card-sub">kWh produced annually by 3x integrated 12MW offshore wind turbines.</p>
                     </div>
 
-                    <div style="border: var(--border-thin); padding: 35px; background: var(--white);">
-                        <h3 style="font-weight: normal; font-size: 1.2rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px;">Emergency Battery Surplus</h3>
-                        <div style="font-size: 2.5rem; margin-bottom: 5px;">12,780,000 kWh / yr</div>
-                        <div style="font-size: 0.85rem; color: var(--gray-dark); text-transform: uppercase; letter-spacing: 1px;">9% Production Margin Diverted to On-site Battery Storage</div>
+                    <div class="calc-card">
+                        <span class="calc-card-title">Platform Compute Draw</span>
+                        <div class="calc-card-val">129.2 M</div>
+                        <p class="calc-card-sub">kWh consumed by 175,000 sq ft server load and auxiliary systems.</p>
+                    </div>
+
+                    <div class="calc-card" style="background: var(--gray-100);">
+                        <span class="calc-card-title">Emergency Battery Surplus</span>
+                        <div class="calc-card-val">12.78 M</div>
+                        <p class="calc-card-sub">kWh (9.0% surplus) fed directly into solid-state battery storage banks.</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <div class="spacer-lg"></div>
+    <div class="space-240"></div>
+
+    <!-- Emergency Disruption & System Reliability -->
+    <section id="reliability" class="section-wrapper">
+        <div class="container">
+            <span class="section-num">05 / System Reliability & Disruption Resilience</span>
+            <h2 class="section-heading-lg">Engineered for extreme maritime environmental conditions.</h2>
+            
+            <div class="space-60"></div>
+
+            <div class="scenario-grid">
+                <div class="scenario-card">
+                    <span class="scenario-code">Scenario A — Low Wind Event</span>
+                    <h3 class="scenario-title">100% Battery Transition</h3>
+                    <p class="scenario-body">In the event of zero wind velocity, Level 01 battery banks instantly engage within 2 milliseconds, providing 72 hours of full-load operation without shedding compute workloads.</p>
+                </div>
+
+                <div class="scenario-card">
+                    <span class="scenario-code">Scenario B — Category 5 Hurricane</span>
+                    <h3 class="scenario-title">Structural Wave Dissipation</h3>
+                    <p class="scenario-body">The open steel jacket framework allows massive storm surge waves to pass cleanly through below the deck level without impacting structural stability or data integrity.</p>
+                </div>
+
+                <div class="scenario-card">
+                    <span class="scenario-code">Scenario C — Fiber Severance</span>
+                    <h3 class="scenario-title">Dual Subsea + Satellite Mesh</h3>
+                    <p class="scenario-body">Subsea optical cables are laid in redundant loop paths. If a cable is severed, traffic automatically reroutes to laser satellite arrays on Level 05.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="space-180"></div>
 
     <!-- Footer -->
     <footer>
         <div class="container">
-            <div class="footer-inner">
-                <div>NEREUS INFRASTRUCTURE PLATFORMS INC.</div>
-                <div>ALL RIGHTS RESERVED.</div>
+            <div class="footer-grid">
+                <div>
+                    <div class="footer-brand">Nereus</div>
+                    <p class="footer-desc">Redefining global data infrastructure by engineering self-sustaining, ocean-cooled compute superstructures on repurposed maritime assets.</p>
+                </div>
+
+                <div>
+                    <div class="footer-heading">Platform Nav</div>
+                    <ul class="footer-links">
+                        <li><a href="#transformation">Digital Twin Demo</a></li>
+                        <li><a href="#architecture">5-Story Structure</a></li>
+                        <li><a href="#thermal">Titanium Heat Exchange</a></li>
+                        <li><a href="#power">Power Matrix</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <div class="footer-heading">Specifications</div>
+                    <ul class="footer-links">
+                        <li><a href="#">Structural Capacity</a></li>
+                        <li><a href="#">Subsea Fiber Topology</a></li>
+                        <li><a href="#">Marine Eco Protection</a></li>
+                        <li><a href="#">Security Protocol</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div>&copy; 2026 Nereus Computing Platforms Inc. All Rights Reserved.</div>
+                <div>Offshore Infrastructure Architecture Grade</div>
             </div>
         </div>
     </footer>
 
-    <!-- -------------------------------------------------------------
-         JAVASCRIPT LOGIC
-    ------------------------------------------------------------- -->
+    <!-- ==========================================================================
+       JAVASCRIPT: 3D DIGITAL TWIN ENGINE & INTERACTIVE SIMULATORS
+       ========================================================================== -->
     <script>
-        /* -------------------------------------------------------------
-           1. 3D DIGITAL TWIN TRANSFORMATION SIMULATOR (THREE.JS)
-        ------------------------------------------------------------- */
-        let scene, camera, renderer;
-        let rigGroup, dataCenterGroup, turbinesGroup;
-        let transformFactor = 1.0; // 0.0 = Legacy Rig, 1.0 = Nereus Data Center
+        /* ==========================================================================
+           1. 3D DIGITAL TWIN TRANSFORMATION ENGINE (THREE.JS)
+           ========================================================================== */
+        let scene, camera, renderer, controls;
+        let rigMeshGroup, dataCenterMeshGroup, turbinesMeshGroup, seaSurfaceMesh;
+        let morphFactor = 1.0; // 0.0 = Legacy Oil Rig, 1.0 = Nereus Data Center
 
-        function init3D() {
-            const canvas = document.getElementById('webgl-canvas');
+        function init3DDigitalTwin() {
+            const canvas = document.getElementById('transformation-canvas');
             const container = canvas.parentElement;
 
             // Scene setup
             scene = new THREE.Scene();
-            scene.background = new THREE.Color(0xfafafa);
+            scene.background = new THREE.Color(0xfdfdfd);
 
             // Camera setup
-            camera = new THREE.PerspectiveCamera(45, container.clientWidth / 550, 0.1, 1000);
-            camera.position.set(40, 25, 50);
-            camera.lookAt(0, 5, 0);
+            camera = new THREE.PerspectiveCamera(40, container.clientWidth / container.clientHeight, 0.1, 1000);
+            camera.position.set(55, 30, 65);
 
-            // Renderer
-            renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
-            renderer.setSize(container.clientWidth, 550);
+            // Renderer setup
+            renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
+            renderer.setSize(container.clientWidth, container.clientHeight);
             renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-            // Wireframe Material Palette (Black & White Minimalist)
+            // OrbitControls setup
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+            controls.maxPolarAngle = Math.PI / 2 - 0.02; // Don't clip below water line
+            controls.minDistance = 20;
+            controls.maxDistance = 140;
+            controls.target.set(0, 12, 0);
+
+            // Materials Palette (Minimalist Black, White, Wireframes)
             const wireframeBlack = new THREE.MeshBasicMaterial({ color: 0x000000, wireframe: true });
             const solidWhite = new THREE.MeshBasicMaterial({ color: 0xffffff });
-            const darkGrayWire = new THREE.MeshBasicMaterial({ color: 0x666666, wireframe: true });
+            const darkGrayLine = new THREE.MeshBasicMaterial({ color: 0x555555, wireframe: true });
+            const seaWireframe = new THREE.MeshBasicMaterial({ color: 0xcccccc, wireframe: true });
 
-            // Create Master Groups
-            rigGroup = new THREE.Group();
-            dataCenterGroup = new THREE.Group();
-            turbinesGroup = new THREE.Group();
+            // Master Groups
+            rigMeshGroup = new THREE.Group();
+            dataCenterMeshGroup = new THREE.Group();
+            turbinesMeshGroup = new THREE.Group();
 
-            scene.add(rigGroup);
-            scene.add(dataCenterGroup);
-            scene.add(turbinesGroup);
+            scene.add(rigMeshGroup);
+            scene.add(dataCenterMeshGroup);
+            scene.add(turbinesMeshGroup);
 
-            // --- A. Base Ocean Water Plane ---
-            const oceanGeo = new THREE.PlaneGeometry(120, 120, 24, 24);
-            const oceanMesh = new THREE.Mesh(oceanGeo, darkGrayWire);
-            oceanMesh.rotation.x = -Math.PI / 2;
-            oceanMesh.position.y = -8;
-            scene.add(oceanMesh);
+            // --- A. Ocean Sea Surface ---
+            const seaGeo = new THREE.PlaneGeometry(200, 200, 32, 32);
+            seaSurfaceMesh = new THREE.Mesh(seaGeo, seaWireframe);
+            seaSurfaceMesh.rotation.x = -Math.PI / 2;
+            seaSurfaceMesh.position.y = -5;
+            scene.add(seaSurfaceMesh);
 
-            // --- B. Rig Substructure (Legacy Legs / Jacket) ---
-            for (let x of [-10, 10]) {
-                for (let z of [-10, 10]) {
-                    const legGeo = new THREE.CylinderGeometry(0.8, 1.2, 25, 8);
-                    const leg = new THREE.Mesh(legGeo, wireframeBlack);
-                    leg.position.set(x, 4.5, z);
-                    rigGroup.add(leg);
-                }
+            // --- B. Substructure Jackets (Common Legacy Foundation) ---
+            const legPositions = [[-14, -14], [14, -14], [14, 14], [-14, 14]];
+            legPositions.forEach(pos => {
+                const legGeo = new THREE.CylinderGeometry(1.2, 1.8, 30, 8);
+                const leg = new THREE.Mesh(legGeo, wireframeBlack);
+                leg.position.set(pos[0], 10, pos[1]);
+                rigMeshGroup.add(leg);
+            });
+
+            // Structural Cross Braces
+            for (let y of [2, 10, 18]) {
+                const braceGeo = new THREE.BoxGeometry(28, 0.6, 0.6);
+                
+                const b1 = new THREE.Mesh(braceGeo, wireframeBlack);
+                b1.position.set(0, y, 14);
+                rigMeshGroup.add(b1);
+
+                const b2 = new THREE.Mesh(braceGeo, wireframeBlack);
+                b2.position.set(0, y, -14);
+                rigMeshGroup.add(b2);
+
+                const b3 = new THREE.Mesh(braceGeo, braceGeo);
+                const b3Mesh = new THREE.Mesh(new THREE.BoxGeometry(0.6, 0.6, 28), wireframeBlack);
+                b3Mesh.position.set(14, y, 0);
+                rigMeshGroup.add(b3Mesh);
+
+                const b4Mesh = new THREE.Mesh(new THREE.BoxGeometry(0.6, 0.6, 28), wireframeBlack);
+                b4Mesh.position.set(-14, y, 0);
+                rigMeshGroup.add(b4Mesh);
             }
 
-            // Cross bracing
-            const braceGeo = new THREE.BoxGeometry(22, 0.5, 0.5);
-            const brace1 = new THREE.Mesh(braceGeo, wireframeBlack);
-            brace1.position.set(0, 2, 10);
-            rigGroup.add(brace1);
+            // --- C. Legacy Oil Rig Upper Structures (Shrinks on transform) ---
+            const legacyClutter = new THREE.Group();
 
-            const brace2 = new THREE.Mesh(braceGeo, wireframeBlack);
-            brace2.position.set(0, 2, -10);
-            rigGroup.add(brace2);
-
-            // --- C. Legacy Rig Equipment (Industrial clutter - hides on transform) ---
-            const craneGeo = new THREE.CylinderGeometry(0.2, 0.4, 15, 6);
-            const crane = new THREE.Mesh(craneGeo, wireframeBlack);
-            crane.position.set(-8, 22, -8);
-            crane.rotation.z = -Math.PI / 4;
-            rigGroup.add(crane);
-
-            const derrickGeo = new THREE.ConeGeometry(3, 12, 4);
+            // Derrick Tower
+            const derrickGeo = new THREE.ConeGeometry(4.5, 22, 4);
             const derrick = new THREE.Mesh(derrickGeo, wireframeBlack);
-            derrick.position.set(0, 22, 0);
-            rigGroup.add(derrick);
+            derrick.position.set(0, 30, 0);
+            legacyClutter.add(derrick);
 
-            // --- D. 5-Story Data Center Superstructure (Appears on transform) ---
+            // Oil Crane Arm
+            const craneArmGeo = new THREE.CylinderGeometry(0.3, 0.6, 20, 6);
+            const craneArm = new THREE.Mesh(craneArmGeo, wireframeBlack);
+            craneArm.position.set(-10, 28, -8);
+            craneArm.rotation.z = -Math.PI / 3;
+            legacyClutter.add(craneArm);
+
+            // Gas Flare Pipe
+            const flareGeo = new THREE.CylinderGeometry(0.4, 0.4, 25, 6);
+            const flare = new THREE.Mesh(flareGeo, wireframeBlack);
+            flare.position.set(12, 26, 10);
+            flare.rotation.x = Math.PI / 6;
+            legacyClutter.add(flare);
+
+            rigMeshGroup.add(legacyClutter);
+
+            // --- D. Nereus 5-Story Data Center Superstructure (Expands on transform) ---
             for (let i = 0; i < 5; i++) {
-                const floorGeo = new THREE.BoxGeometry(24, 3.2, 24);
-                
-                // Composite mesh with solid interior and black wireframe outline
-                const floorMesh = new THREE.Mesh(floorGeo, solidWhite);
+                const floorGroup = new THREE.Group();
+
+                // Solid white inner deck volume + Crisp black wireframe edges
+                const floorGeo = new THREE.BoxGeometry(32, 4.2, 32);
+                const floorSolid = new THREE.Mesh(floorGeo, solidWhite);
                 const floorWire = new THREE.Mesh(floorGeo, wireframeBlack);
-                
-                const floorContainer = new THREE.Group();
-                floorContainer.add(floorMesh);
-                floorContainer.add(floorWire);
-                
-                floorContainer.position.y = 18.5 + (i * 3.8);
-                dataCenterGroup.add(floorContainer);
+
+                floorGroup.add(floorSolid);
+                floorGroup.add(floorWire);
+
+                // Internal Rack Representation (Visible through wireframe)
+                for (let rx = -10; rx <= 10; rx += 5) {
+                    for (let rz = -10; rz <= 10; rz += 5) {
+                        const rackGeo = new THREE.BoxGeometry(1.5, 2.8, 1.5);
+                        const rackMesh = new THREE.Mesh(rackGeo, darkGrayLine);
+                        rackMesh.position.set(rx, 0, rz);
+                        floorGroup.add(rackMesh);
+                    }
+                }
+
+                floorGroup.position.y = 22 + (i * 5.2);
+                dataCenterMeshGroup.add(floorGroup);
             }
 
-            // --- E. Offshore Turbines ---
-            const turbinePositions = [[-35, -20], [35, -20], [0, 35]];
-            turbinePositions.forEach(pos => {
+            // Titanium Sea Water Heat Exchanger Intake Pipes (Level 01)
+            const pipeGeo = new THREE.CylinderGeometry(0.8, 0.8, 28, 8);
+            const pipe1 = new THREE.Mesh(pipeGeo, wireframeBlack);
+            pipe1.position.set(-12, 8, -12);
+            dataCenterMeshGroup.add(pipe1);
+
+            const pipe2 = new THREE.Mesh(pipeGeo, wireframeBlack);
+            pipe2.position.set(12, 8, 12);
+            dataCenterMeshGroup.add(pipe2);
+
+            // --- E. Offshore Wind Turbines ---
+            const turbineCoords = [[-45, -30], [45, -30], [0, 45]];
+            turbineCoords.forEach(coords => {
                 const tGroup = new THREE.Group();
-                tGroup.position.set(pos[0], -8, pos[1]);
+                tGroup.position.set(coords[0], -5, coords[1]);
 
                 // Tower
-                const tower = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 1, 30, 8), wireframeBlack);
-                tower.position.y = 15;
+                const towerGeo = new THREE.CylinderGeometry(0.8, 1.6, 42, 8);
+                const tower = new THREE.Mesh(towerGeo, wireframeBlack);
+                tower.position.y = 21;
                 tGroup.add(tower);
 
-                // Rotor Head & Blades
+                // Rotor Head
+                const headGeo = new THREE.SphereGeometry(1.2, 8, 8);
+                const head = new THREE.Mesh(headGeo, wireframeBlack);
+                head.position.y = 42;
+                tGroup.add(head);
+
+                // Rotor Blades
                 const bladesGroup = new THREE.Group();
-                bladesGroup.position.y = 30;
+                bladesGroup.position.y = 42;
 
                 for (let b = 0; b < 3; b++) {
-                    const blade = new THREE.Mesh(new THREE.BoxGeometry(0.4, 10, 0.1), wireframeBlack);
-                    blade.position.y = 5;
+                    const bladeGeo = new THREE.BoxGeometry(0.6, 16, 0.2);
+                    const blade = new THREE.Mesh(bladeGeo, wireframeBlack);
+                    blade.position.y = 8;
                     blade.rotation.z = (b * Math.PI * 2) / 3;
                     bladesGroup.add(blade);
                 }
 
                 tGroup.add(bladesGroup);
-                turbinesGroup.add(tGroup);
+                turbinesMeshGroup.add(tGroup);
             });
 
-            // Handle Resize
+            // Window Resize Handling
             window.addEventListener('resize', onWindowResize);
 
-            // Start Animation Loop
-            animate();
+            // Trigger Initial Render Loop
+            animate3D();
         }
 
-        function animate() {
-            requestAnimationFrame(animate);
+        function animate3D() {
+            requestAnimationFrame(animate3D);
 
-            // Slow Orbit Rotation
-            scene.rotation.y += 0.002;
+            // OrbitControls update
+            controls.update();
 
-            // Rotate Wind Turbine Blades
-            turbinesGroup.children.forEach(t => {
-                const bladesGroup = t.children[1];
-                if (bladesGroup) bladesGroup.rotation.z += 0.03;
+            // Rotate Offshore Wind Turbines
+            turbinesMeshGroup.children.forEach(turbine => {
+                const blades = turbine.children[2];
+                if (blades) blades.rotation.z += 0.025;
             });
 
-            // Smooth Interpolation based on Transform Factor
-            // Legacy items shrink out, Data Center stacks expand in
-            const legacyScale = 1 - transformFactor;
-            rigGroup.children.slice(4).forEach(child => {
-                child.scale.set(legacyScale, legacyScale, legacyScale);
-                child.visible = legacyScale > 0.01;
-            });
+            // Morph Logic Interpolation
+            const legacyScale = 1 - morphFactor;
+            
+            // Legacy clutter scale & visibility
+            const legacyGroup = rigMeshGroup.children[rigMeshGroup.children.length - 1];
+            if (legacyGroup) {
+                legacyGroup.scale.set(legacyScale, legacyScale, legacyScale);
+                legacyGroup.visible = legacyScale > 0.01;
+            }
 
-            dataCenterGroup.children.forEach((floor, idx) => {
-                const targetY = 18.5 + (idx * 3.8);
-                floor.position.y = THREE.MathUtils.lerp(15, targetY, transformFactor);
-                floor.scale.set(transformFactor, transformFactor, transformFactor);
-                floor.visible = transformFactor > 0.01;
+            // Nereus 5-story building scale & vertical positioning
+            dataCenterMeshGroup.children.forEach((floor, idx) => {
+                if (idx < 5) { // 5 Floor decks
+                    const targetY = 22 + (idx * 5.2);
+                    floor.position.y = THREE.MathUtils.lerp(18, targetY, morphFactor);
+                    floor.scale.set(morphFactor, morphFactor, morphFactor);
+                    floor.visible = morphFactor > 0.01;
+                }
             });
 
             renderer.render(scene, camera);
         }
 
         function onWindowResize() {
-            const container = document.getElementById('webgl-canvas').parentElement;
-            camera.aspect = container.clientWidth / 550;
+            const canvas = document.getElementById('transformation-canvas');
+            const container = canvas.parentElement;
+            camera.aspect = container.clientWidth / container.clientHeight;
             camera.updateProjectionMatrix();
-            renderer.setSize(container.clientWidth, 550);
+            renderer.setSize(container.clientWidth, container.clientHeight);
         }
 
-        function onSliderChange(val) {
-            transformFactor = val / 100;
+        function updateMorphFactor(val) {
+            morphFactor = val / 100;
+            updateHUDText();
         }
 
-        function setTransformProgress(val) {
-            transformFactor = val;
-            document.getElementById('transformSlider').value = val * 100;
+        function setMorphPreset(val) {
+            morphFactor = val / 100;
+            document.getElementById('morphSlider').value = val;
+
+            // Toggle active state on buttons
+            document.querySelectorAll('.btn-sharp').forEach(btn => btn.classList.remove('active'));
+            if (val === 100) document.getElementById('btn-full-nereus').classList.add('active');
+
+            updateHUDText();
         }
 
-        /* -------------------------------------------------------------
-           2. THERMAL SIMULATOR MATH CALCULATIONS
-        ------------------------------------------------------------- */
-        function calculateThermalSim() {
-            const temp = parseFloat(document.getElementById('tempSlider').value);
-            const workload = parseFloat(document.getElementById('workloadSlider').value);
+        function updateHUDText() {
+            const stateTxt = document.getElementById('hud-state-text');
+            const loadTxt = document.getElementById('hud-load-text');
 
-            document.getElementById('intake-temp-label').innerText = temp;
-            document.getElementById('workload-label').innerText = workload;
-
-            // Base PUE math logic
-            const basePUE = 1.015;
-            const tempDelta = (temp - 4) * 0.0018;
-            const loadDelta = (workload / 100) * 0.012;
-
-            const finalPUE = (basePUE + tempDelta + loadDelta).toFixed(3);
-            const overheadKW = ((workload * 0.08) * (finalPUE - 1) * 100).toFixed(1);
-
-            document.getElementById('pue-display').innerText = finalPUE;
-            document.getElementById('cooling-energy-display').innerText = overheadKW + " kW";
+            if (morphFactor > 0.8) {
+                stateTxt.innerText = "Nereus Data Platform (Active)";
+                loadTxt.innerText = "42,500 Metric Tons";
+            } else if (morphFactor < 0.2) {
+                stateTxt.innerText = "Legacy Decommissioned Oil Rig";
+                loadTxt.innerText = "68,000 Metric Tons (Unloaded)";
+            } else {
+                stateTxt.innerText = "Modular Transformation Phase";
+                loadTxt.innerText = "51,200 Metric Tons";
+            }
         }
 
-        // Initialize 3D Engine on Window Load
+        /* ==========================================================================
+           2. THERMAL SIMULATION MATH ENGINE
+           ========================================================================== */
+        function runThermalSimulation() {
+            const temp = parseFloat(document.getElementById('sim-temp').value);
+            const load = parseFloat(document.getElementById('sim-load').value);
+            const flow = parseFloat(document.getElementById('sim-flow').value);
+
+            document.getElementById('sim-temp-val').innerText = temp;
+            document.getElementById('sim-load-val').innerText = load;
+            document.getElementById('sim-flow-val').innerText = flow.toLocaleString();
+
+            // PUE Calculation Formula
+            const basePUE = 1.012;
+            const tempImpact = (temp - 2) * 0.0015;
+            const loadImpact = (load / 100) * 0.010;
+            const flowEfficiency = (1 - (flow / 20000)) * 0.008;
+
+            const finalPUE = (basePUE + tempImpact + loadImpact + flowEfficiency).toFixed(3);
+            const savingsPercent = ((1 - (finalPUE - 1) / 0.5) * 100).toFixed(1);
+            const dischargeDelta = ((load / 100) * 2.8 * (10000 / flow)).toFixed(1);
+
+            document.getElementById('res-pue').innerText = finalPUE;
+            document.getElementById('res-savings').innerText = savingsPercent + "%";
+            document.getElementById('res-delta').innerText = "+" + dischargeDelta + " °C";
+        }
+
+        // Initialize WebGL Scene on DOM Load
         window.onload = function() {
-            init3D();
-            calculateThermalSim();
+            init3DDigitalTwin();
+            runThermalSimulation();
         };
     </script>
 </body>
